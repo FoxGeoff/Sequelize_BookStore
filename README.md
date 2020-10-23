@@ -59,3 +59,51 @@ applyExtraSetup(sequelize);
 // We export the sequelize connection instance to be used around our app.
 module.exports = sequelize;
 ```
+
+1. Video File version (requires updating)
+
+```JavaScript
+"use strict";
+
+var fs = require("fs");
+var path = require("path");
+const { Sequelize } = require("sequelize");
+var Squelize = require("sequelize");
+var basename = path.basename(__filename);
+var env = process.env.NODE_ENV || "development";
+var config = require(__dirname + "/../config/config.js")[env];
+var db = {};
+
+if (config.use_env_variable) {
+  var sequelize = new Sequelize(process.env[config.use_env_variable], config);
+} else {
+  var sequelize = new Sequelize(
+    config.database,
+    config.username,
+    config.password,
+    config
+  );
+}
+
+fs.readdirSync(__dirname)
+  .filter((file) => {
+    return (
+      file.indexOf(".") !== 0 && file !== basename && file.slice(-3) === ".js"
+    );
+  })
+  .forEach((file) => {
+    var model = sequelize["import"](path.join(__dirname, file));
+    db[model.name] = model;
+  });
+
+Object.keys(db).forEach(() => {
+  if (db[modelName].associate) {
+    db[modelName].associate(db);
+  }
+});
+
+db.sequelize = sequelize;
+db.Sequelize = Squelize;
+
+module.exports = db;
+```
